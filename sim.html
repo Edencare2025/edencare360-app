@@ -222,7 +222,7 @@ function bulge(ctx,c,rx,ry,sx,sy,lift=0){
 }
 // tone tweak on masked region (per pixel)
 function tone(ctx,m,fn){const img=ctx.getImageData(0,0,W,H),d=img.data;const md=m.getContext("2d").getImageData(0,0,W,H).data;const bl=softBlur(ctx.canvas,.04).getContext("2d").getImageData(0,0,W,H).data;
-  for(let i=0;i<d.length;i+=4){const a=md[i]/255;if(a<.02)continue;const r=fn(d[i],d[i+1],d[i+2],bl[i],bl[i+1],bl[i+2]);d[i]+= (r[0]-d[i])*a;d[i+1]+=(r[1]-d[i+1])*a;d[i+2]+=(r[2]-d[i+2])*a}
+  for(let i=0;i<d.length;i+=4){const a=md[i+3]/255;if(a<.02)continue;const r=fn(d[i],d[i+1],d[i+2],bl[i],bl[i+1],bl[i+2]);d[i]+= (r[0]-d[i])*a;d[i+1]+=(r[1]-d[i+1])*a;d[i+2]+=(r[2]-d[i+2])*a}
   ctx.putImageData(img,0,0)}
 const lum=(r,g,b)=>.299*r+.587*g+.114*b;
 
@@ -261,7 +261,7 @@ function render(){
       const L=lum(r,g,b),BL=lum(br,bg,bb);let R=r,G=g,B=b;
       if(BL-L>6){const t=Math.min(1,(BL-L)/30)*0.7*s;R+=(br-r)*t;G+=(bg-g)*t;B+=(bb-b)*t}   // fade spots
       const red=R-(G+B)/2;if(red>18){const t=Math.min(.35,(red-18)/120)*s;R-=red*t*0.6}         // calm redness
-      const lift=1+0.035*s;return[R*lift,G*lift,B*lift];
+      const lift=1+0.025*s;return[R*lift,G*lift,B*lift];
     });
   }
   if(selected.has("eyes")){
