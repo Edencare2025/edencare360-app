@@ -124,6 +124,14 @@ nav button.on{color:var(--brand);font-weight:700}
 .card.tap{cursor:pointer}
 .fab{position:fixed;right:max(14px,calc(50% - 216px));bottom:calc(78px + env(safe-area-inset-bottom));z-index:11;background:var(--dark);color:#fff;border:none;border-radius:28px;padding:12px 16px;font-family:inherit;font-weight:600;font-size:14px;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
 chat-widget{position:relative;z-index:12}
+.leadform{display:grid;gap:10px}
+.leadform input,.leadform select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font-family:inherit;font-size:15px;background:#fff}
+.leadform .lbl{font-size:12.5px;color:var(--muted);margin-bottom:-4px}
+.leadform .consent{display:flex;gap:10px;font-size:12px;line-height:1.45;color:var(--muted);background:var(--sand);padding:10px;border-radius:12px}
+.leadform .consent input{width:18px;height:18px;flex-shrink:0;accent-color:var(--brand)}
+.leadform .fine{font-size:11px;color:var(--muted)}
+.done{text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 16px}
+.done p{font-size:14px;color:var(--muted);margin:6px 0 12px;line-height:1.5}
 .chat{display:flex;flex-direction:column;height:78vh}
 .chat .msgs{flex:1;overflow-y:auto;padding:4px 2px 10px}
 .bub{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14px;line-height:1.45;margin:6px 0}
@@ -141,7 +149,7 @@ chat-widget{position:relative;z-index:12}
 <div class="app">
 <header>
   <div style="display:flex;align-items:center;gap:10px"><img src="logo.png" alt="EdenCare 360" style="width:40px;height:auto"><div class="logo">EdenCare 360<small>MedSpa &amp; Wellness</small></div></div>
-  <a class="hbtn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book</a>
+  <div style="display:flex;gap:8px"><button class="hbtn" style="background:#fff;color:var(--brand);border:1.5px solid var(--brand)" onclick="go('join')">Join · $25</button><a class="hbtn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book</a></div>
 </header>
 
 <main>
@@ -205,7 +213,7 @@ chat-widget{position:relative;z-index:12}
     <h2>Earn rewards</h2>
     <div class="card" style="display:flex;justify-content:space-between;align-items:center">
       <div><div class="big-num">$25</div><div style="font-size:13px;color:var(--muted)">towards your first treatment</div></div>
-      <button class="btn sm" onclick="go('rewards')">See rewards</button>
+      <button class="btn sm" onclick="go('join')">Claim $25</button>
     </div>
 
     <h2>Visit us</h2>
@@ -263,6 +271,7 @@ chat-widget{position:relative;z-index:12}
       <div style="font-size:12px;letter-spacing:1px;opacity:.75">WELCOME REWARD</div>
       <div style="font-size:30px;font-weight:700;margin:4px 0">$25 off</div>
       <div style="font-size:13.5px;opacity:.85">your first treatment when you join</div>
+      <button class="btn light" style="margin-top:12px" onclick="go('join')">Join and claim $25</button>
     </div>
     <h2>Visit rewards</h2>
     <div class="sec-sub">Unlocked by your total number of visits.</div>
@@ -277,6 +286,21 @@ chat-widget{position:relative;z-index:12}
     <div class="card"><div class="item"><div><h3>Allē</h3><p>Earn points on Botox and other Allergan treatments.</p></div><a class="btn sm" href="https://alle.com" target="_blank" rel="noopener">Join</a></div></div>
     <div class="card"><div class="item"><div><h3>Xperience Rewards</h3><p>Merz's program for Xeomin and Radiesse.</p></div><a class="btn sm" href="https://www.xperiencemerz.com" target="_blank" rel="noopener">Join</a></div></div>
     <div class="card"><div class="item"><div><h3>REVA Rewards</h3><p>For Daxxify and SkinPen. We enroll you at your visit in minutes.</p></div><button class="btn sm ghost" onclick="toast('Ask us to enroll you at your visit')">At visit</button></div></div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section class="view" id="join">
+  <div class="pad">
+    <div class="card" style="background:linear-gradient(150deg,var(--dark),var(--brand));color:#fff;border:none;text-align:center;padding:24px 18px">
+      <div style="font-size:12px;letter-spacing:1.5px;opacity:.8">EDEN REWARDS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:30px;margin:6px 0">Get $25 off</div>
+      <div style="font-size:14px;opacity:.9">your first treatment when you join. Free, takes 30 seconds.</div>
+    </div>
+    <div class="card"><b style="font-size:14px">Members get</b>
+      <ul class="perks" style="background:none;padding:6px 0 0"><li>$25 welcome credit in your Patient Wallet</li><li>Member-only texts: flash sales, early access to specials</li><li>A birthday reward every year</li><li>Visit rewards and $30 for every friend you refer</li></ul>
+    </div>
+    <div id="joinForm"></div>
   </div>
 </section>
 
@@ -448,6 +472,7 @@ function go(v){
   window.scrollTo(0,0);
   try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}
   if(v==="quiz")renderQuiz();
+  if(v==="join"){let m=null;try{m=JSON.parse(localStorage.getItem("eden_member")||"null")}catch(e){}$("joinForm").innerHTML=m?`<div class="done"><div style="font-size:34px">💛</div><b>You're already a member${m.first?", "+m.first:""}.</b><p>Your $25 welcome credit is applied at your first visit.</p><button class="btn ghost" onclick="localStorage.removeItem('eden_member');go('join')">Sign up someone else</button></div>`:leadFormHTML()}
 }
 
 function prodCard(p){
@@ -576,10 +601,11 @@ function ask(t){addMsg(t.replace(/</g,"&lt;"),"me");const q=t.toLowerCase();
 }
 $("tierList").innerHTML=MEMBERS.map(tierCard).join("");
 renderHome();renderDisc();renderShop();renderLadder();
-const VIEWS=["home","discover","shop","members","rewards","quiz"];
+const VIEWS=["home","discover","shop","members","rewards","quiz","join"];
 function fromHash(){const h=location.hash.slice(1);if(VIEWS.includes(h))go(h)}
 window.addEventListener("hashchange",fromHash);fromHash();
 </script>
+<script src="js/lead.js"></script>
 <script>
 // Ask Eden = the LeadAR AI chat (same assistant as edencare360.com). Falls back to quick answers if it can't load.
 function askEden(){try{if(window.leadConnector&&window.leadConnector.chatWidget){window.leadConnector.chatWidget.openWidget();return}}catch(e){}openChat()}

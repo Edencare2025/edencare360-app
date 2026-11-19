@@ -48,6 +48,20 @@ label.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);
 .spin{width:28px;height:28px;border:3px solid var(--sand);border-top-color:var(--brand);border-radius:50%;animation:s 1s linear infinite;margin:0 auto 10px}
 @keyframes s{to{transform:rotate(360deg)}}
 .hide{display:none!important}
+.prog{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-bottom:14px}
+.pbar{flex:1;height:6px;background:var(--sand);border-radius:4px;overflow:hidden}.pbar i{display:block;height:100%;background:var(--brand)}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:8px;font-family:inherit;font-size:15px;cursor:pointer;color:var(--ink)}
+.opt small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.opt.on{border-color:var(--brand);background:#fbf3ea}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid2 .opt{margin:0;font-size:14px}
+input.age{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:14px;font-size:18px;font-family:inherit}
+.met{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.met:last-child{border:none}
+.met .bar{width:110px;height:7px;background:var(--sand);border-radius:4px;overflow:hidden;margin-left:10px}.met .bar i{display:block;height:100%;background:var(--brand)}
+.met em{font-style:normal;font-size:12px;color:var(--muted);display:block}
+.leadform{display:grid;gap:10px}.leadform input,.leadform select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font-family:inherit;font-size:15px;background:#fff}
+.leadform .lbl{font-size:12.5px;color:var(--muted);margin-bottom:-4px}.leadform .consent{display:flex;gap:10px;font-size:12px;line-height:1.45;color:var(--muted);background:var(--sand);padding:10px;border-radius:12px}
+.leadform .consent input{width:18px;height:18px;flex-shrink:0;accent-color:var(--brand)}.leadform .fine{font-size:11px;color:var(--muted)}
+.done{text-align:center}.done p{font-size:14px;color:var(--muted);margin:6px 0;line-height:1.5}
 .recs .item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .recs .item:last-child{border:none}
 .recs small{display:block;color:var(--muted);font-size:12px}
@@ -57,8 +71,18 @@ label.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);
 <div class="app">
 <header><a class="back" href="./" aria-label="Back to app">‹</a><img src="logo.png" alt=""><b>Preview Your Results</b></header>
 
+<!-- STEP 0: Ageless-style questions -->
+<section id="s0" class="pad">
+  <div id="saved"></div>
+  <div class="prog"><span id="qn">1 of 5</span><div class="pbar"><i id="pfill" style="width:20%"></i></div></div>
+  <h1 id="qt">Have you had aesthetic treatments before?</h1>
+  <p class="sub" id="qs">This helps us tailor your preview and plan.</p>
+  <div id="qo"></div>
+  <div class="row" style="margin-top:14px"><button class="btn ghost" id="qBack">Back</button><button class="btn" id="qNext">Continue</button></div>
+</section>
+
 <!-- STEP 1: intro + consent -->
-<section id="s1" class="pad">
+<section id="s1" class="pad hide">
   <h1>See a preview before you book</h1>
   <p class="sub">Upload a selfie and see an illustration of how common treatments can soften lines, restore volume and refresh skin.</p>
   <div class="card">
@@ -92,11 +116,18 @@ label.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);
   <h2>Intensity</h2>
   <div class="seg" id="seg"><button data-v="0.6">Subtle</button><button data-v="1" class="on">Natural</button><button data-v="1.4">Noticeable</button></div>
   <div class="card recs" style="margin-top:16px" id="recs"></div>
+  <h2>Your photo analysis</h2>
+  <p class="sub" style="margin-bottom:8px">A cosmetic read of your photo, done on your phone. Lighting and camera affect it; Dr. Edwards will assess you in person.</p>
+  <div class="card" id="analysis"></div>
+  <h2>Send your plan to Dr. Edwards</h2>
+  <p class="sub" style="margin-bottom:8px">We'll text you to set up a consultation. Your photo is not sent, only the treatments you're interested in.</p>
+  <div class="card" id="consult"></div>
   <div class="row" style="margin-top:4px">
     <a class="btn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book a consultation</a>
   </div>
   <div class="row" style="margin-top:10px">
-    <button class="btn ghost" id="saveBtn">Save my preview</button>
+    <button class="btn ghost" id="keepBtn">Save to my results</button>
+    <button class="btn ghost" id="saveBtn">Download image</button>
     <button class="btn ghost" id="againBtn">New photo</button>
   </div>
   <a class="btn ghost" style="margin-top:10px" href="https://pay.withcherry.com/edencare-360-medspa--wellness" target="_blank" rel="noopener">💳 Check payment options with Cherry</a>
@@ -107,11 +138,12 @@ label.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);
 <section id="sErr" class="pad hide"><div class="card"><b>We couldn't find a face in that photo.</b><p class="sub" style="margin:8px 0 12px">Try a well-lit, front-facing selfie with your whole face visible.</p><button class="btn" onclick="reset()">Try again</button></div></section>
 </div>
 
+<script src="js/lead.js"></script>
 <script type="module">
 import {FaceLandmarker, FilesetResolver} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.3/vision_bundle.mjs";
 
 const $=id=>document.getElementById(id);
-const show=id=>["s1","s2","s3","sErr"].forEach(s=>$(s).classList.toggle("hide",s!==id));
+const show=id=>["s0","s1","s2","s3","sErr"].forEach(s=>$(s).classList.toggle("hide",s!==id));
 let landmarker=null, srcCanvas=null, P=null, W=0, H=0, intensity=1;
 const selected=new Set(["tox"]);
 
@@ -142,7 +174,36 @@ $("pickBtn").onclick=()=>$("file").click();
 $("file").onchange=e=>e.target.files[0]&&load(e.target.files[0]);
 $("cam").onchange=e=>e.target.files[0]&&load(e.target.files[0]);
 $("againBtn").onclick=()=>reset();
+$("keepBtn").onclick=()=>{const c=document.createElement("canvas"),w=240,h=Math.round(240*H/W);c.width=w;c.height=h;c.getContext("2d").drawImage($("after"),0,0,w,h);
+  const L=loadSaved();L.unshift({date:Date.now(),thumb:c.toDataURL("image/jpeg",.7),treat:TREAT.filter(t=>selected.has(t.k)).map(t=>t.n)});
+  try{localStorage.setItem("eden_results",JSON.stringify(L.slice(0,6)));$("keepBtn").textContent="Saved ✓";showSaved()}catch(e){$("keepBtn").textContent="Couldn't save"}};
 window.reset=()=>{$("file").value="";$("cam").value="";show("s1")};
+// ----- questionnaire -----
+const A={exp:null,age:"",concerns:[],look:"Natural",wellness:[]};
+const CONCERNS=[["Fine Lines & Wrinkles","tox"],["Under-Eye Hollows","eyes"],["Lip Volume","lips"],["Cheek Volume","cheeks"],["Jawline Definition","jaw"],["Chin Definition","jaw"],["Sagging & Jowls","jaw"],["Skin Texture","skin"],["Acne / Scarring","skin"],["Skin Tone / Redness","ipl"],["Pigmentation / Sun Damage","ipl"],["Hair Loss / Thinning",null]];
+const LOOKS=[["Natural","Subtle enhancements no one will notice, but everyone will compliment",.7],["Refreshed","Look well-rested and rejuvenated",1],["Contoured","Sculpted, defined features",1.35],["Open minded","Show me what works best for my face",1]];
+const WELL=["Weight loss","Fat reduction","Hormone optimization","Energy & vitality","Sleep & stress","Hair restoration","Women's wellness","Not now"];
+let q=0;
+const QS=[
+ {t:"Have you had aesthetic treatments before?",s:"This helps us tailor your preview and plan.",r:()=>[["No, I'm new to this","First time exploring treatments"],["Yes, a few times","Some experience with aesthetics"],["Yes, I'm experienced","Regular aesthetic treatments"]].map(o=>`<button class="opt ${A.exp===o[0]?"on":""}" data-v="${o[0]}">${o[0]}<small>${o[1]}</small></button>`).join(""),pick:v=>A.exp=v,ok:()=>A.exp},
+ {t:"What's your age?",s:"Treatment suggestions differ by age.",r:()=>`<input class="age" id="ageIn" inputmode="numeric" placeholder="Age" value="${A.age}">`,ok:()=>{A.age=($("ageIn")||{}).value||A.age;return +A.age>=18&&+A.age<100}},
+ {t:"What are your top concerns?",s:"Choose all that apply.",multi:1,r:()=>`<div class="grid2">${CONCERNS.map(c=>`<button class="opt ${A.concerns.includes(c[0])?"on":""}" data-v="${c[0]}">${c[0]}</button>`).join("")}</div>`,pick:v=>{const i=A.concerns.indexOf(v);i>-1?A.concerns.splice(i,1):A.concerns.push(v)},ok:()=>A.concerns.length},
+ {t:"Which look are you going for?",s:"This sets how strong your preview looks.",r:()=>LOOKS.map(l=>`<button class="opt ${A.look===l[0]?"on":""}" data-v="${l[0]}">${l[0]}<small>${l[1]}</small></button>`).join(""),pick:v=>A.look=v,ok:()=>A.look},
+ {t:"Interested in wellness too?",s:"Optional. Choose any.",multi:1,r:()=>`<div class="grid2">${WELL.map(w=>`<button class="opt ${A.wellness.includes(w)?"on":""}" data-v="${w}">${w}</button>`).join("")}</div>`,pick:v=>{if(v==="Not now"){A.wellness=[v];return}A.wellness=A.wellness.filter(x=>x!=="Not now");const i=A.wellness.indexOf(v);i>-1?A.wellness.splice(i,1):A.wellness.push(v)},ok:()=>true}
+];
+function renderQ(){const Q=QS[q];$("qn").textContent=`${q+1} of ${QS.length}`;$("pfill").style.width=((q+1)/QS.length*100)+"%";$("qt").textContent=Q.t;$("qs").textContent=Q.s;$("qo").innerHTML=Q.r();$("qBack").style.visibility=q?"visible":"hidden"}
+$("qo").onclick=e=>{const b=e.target.closest(".opt");if(!b)return;QS[q].pick(b.dataset.v);renderQ();if(!QS[q].multi&&q!==1)setTimeout(next,180)};
+function next(){if(!QS[q].ok())return;if(q<QS.length-1){q++;renderQ()}else{
+  intensity=(LOOKS.find(l=>l[0]===A.look)||[0,0,1])[2];
+  selected.clear();A.concerns.forEach(c=>{const k=(CONCERNS.find(x=>x[0]===c)||[])[1];if(k)selected.add(k)});if(!selected.size)selected.add("tox");
+  syncChips();show("s1")}}
+$("qNext").onclick=next;$("qBack").onclick=()=>{if(q){q--;renderQ()}};
+function syncChips(){[...$("chips").children].forEach(b=>b.classList.toggle("on",selected.has(b.dataset.k)));[...$("seg").children].forEach(b=>b.classList.toggle("on",Math.abs(+b.dataset.v-intensity)<.2||(intensity===.7&&b.dataset.v==="0.6")||(intensity===1.35&&b.dataset.v==="1.4")))}
+// saved results (kept only on this phone)
+function loadSaved(){try{return JSON.parse(localStorage.getItem("eden_results")||"[]")}catch(e){return[]}}
+function showSaved(){const L=loadSaved();$("saved").innerHTML=L.length?`<div class="card"><b>Your saved results</b><p class="sub" style="margin:4px 0 8px">Saved only on this phone.</p>${L.map((r,i)=>`<div style="display:flex;gap:10px;align-items:center;margin:8px 0"><img src="${r.thumb}" style="width:56px;height:56px;object-fit:cover;border-radius:10px"><div style="flex:1;font-size:13px"><b>${new Date(r.date).toLocaleDateString()}</b><br>${r.treat.join(", ")}</div><button class="btn ghost" style="width:auto;padding:7px 10px;font-size:12px" onclick="delSaved(${i})">Delete</button></div>`).join("")}</div>`:""}
+window.delSaved=i=>{const L=loadSaved();L.splice(i,1);try{localStorage.setItem("eden_results",JSON.stringify(L))}catch(e){}showSaved()};
+showSaved();renderQ();
 $("seg").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("seg").children].forEach(x=>x.classList.toggle("on",x===b));intensity=+b.dataset.v;render()};
 $("chips").innerHTML=TREAT.map(t=>`<button class="chip ${selected.has(t.k)?"on":""}" data-k="${t.k}">${t.n}</button>`).join("");
 $("chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const k=b.dataset.k;selected.has(k)?selected.delete(k):selected.add(k);b.classList.toggle("on");render()};
@@ -181,7 +242,7 @@ async function load(file){
     for(const id of ["before","after"]){$(id).width=W;$(id).height=H}
     $("before").getContext("2d").drawImage(srcCanvas,0,0);
     $("before").style.width=$("cmp").clientWidth+"px";
-    show("s3");$("before").style.width=$("cmp").clientWidth+"px";setPos(.5);render();
+    show("s3");$("before").style.width=$("cmp").clientWidth+"px";setPos(.5);render();analyze();
   }catch(err){console.log(err);$("loadMsg").textContent="Something went wrong loading the preview tool. Please check your connection and try again.";setTimeout(()=>show("sErr"),2500)}
 }
 window.addEventListener("resize",()=>{if(P)$("before").style.width=$("cmp").clientWidth+"px"});
@@ -271,9 +332,38 @@ function render(){
   }
   // recommendations
   const chosen=TREAT.filter(t=>selected.has(t.k));
+  const det=`Concerns: ${A.concerns.join(", ")||"n/a"}. Look: ${A.look}. Preview: ${chosen.map(t=>t.n).join(", ")}. Wellness: ${A.wellness.join(", ")||"none"}. Age: ${A.age||"n/a"}. Experience: ${A.exp||"n/a"}.`;
+  if(!$("consult").dataset.set){$("consult").innerHTML=window.leadFormHTML?leadFormHTML({kind:"consult_request",details:det,cta:"Send to Dr. Edwards"}):"";$("consult").dataset.set=1}
+  else{const h=$("consult").querySelector("input[name=details]");if(h)h.value=det}
   $("recs").innerHTML=chosen.length?`<b style="font-size:14px">Treatments in this preview</b>`+chosen.map(t=>`<div class="item"><div>${t.n}<small>${t.t}</small></div><div style="font-weight:600;font-size:13px;text-align:right">${t.p}</div></div>`).join(""):`<span class="sub">Choose a treatment above to see a preview.</span>`;
 }
 window.__load=load; // used for automated testing
+// ---------- on-device photo analysis ----------
+function analyze(){
+  const ctx=srcCanvas.getContext("2d",{willReadFrequently:true}),img=ctx.getImageData(0,0,W,H).data;
+  const bl=softBlur(srcCanvas,.05).getContext("2d").getImageData(0,0,W,H).data;
+  const fm=faceMask().getContext("2d").getImageData(0,0,W,H).data;
+  let n=0,tex=0,sl=0,sl2=0,red=0;
+  for(let i=0;i<img.length;i+=16){if(fm[i+3]<200)continue;const L=lum(img[i],img[i+1],img[i+2]),B=lum(bl[i],bl[i+1],bl[i+2]);tex+=Math.abs(L-B);sl+=B;sl2+=B*B;red+=Math.max(0,img[i]-(img[i+1]+img[i+2])/2);n++}
+  if(!n){$("analysis").innerHTML="<span class='sub'>Couldn't analyze this photo.</span>";return}
+  const meanL=sl/n,sd=Math.sqrt(Math.max(0,sl2/n-meanL*meanL)),texture=tex/n,redness=red/n;
+  const regionL=(c,rx,ry)=>{let s=0,k=0;for(let y=Math.max(0,c.y-ry|0);y<Math.min(H,c.y+ry);y+=2)for(let x=Math.max(0,c.x-rx|0);x<Math.min(W,c.x+rx);x+=2){const i=(y*W+x)*4;s+=lum(img[i],img[i+1],img[i+2]);k++}return k?s/k:0};
+  const ew=eyeW(),under=(regionL({x:pt(145).x,y:pt(145).y+ew*.35},ew*.5,ew*.2)+regionL({x:pt(374).x,y:pt(374).y+ew*.35},ew*.5,ew*.2))/2,cheek=(regionL(mid(pt(50),pt(205)),ew*.4,ew*.3)+regionL(mid(pt(280),pt(425)),ew*.4,ew*.3))/2;
+  const lipH=dist(pt(0),pt(17)),lipW=dist(pt(61),pt(291)),cx=(pt(234).x+pt(454).x)/2;
+  let asym=0;[[33,263],[61,291],[50,280],[172,397],[70,300]].forEach(([a,b])=>{asym+=Math.abs((cx-pt(a).x)-(pt(b).x-cx))});asym=asym/5/dist(pt(234),pt(454));
+  const clamp=v=>Math.max(5,Math.min(98,Math.round(v)));
+  const M=[
+   ["Skin smoothness",clamp(100-texture*9),"Fine texture and lines","skin"],
+   ["Tone evenness",clamp(100-sd*2.2),"Spots and uneven color","ipl"],
+   ["Redness",clamp(100-redness*3),"Higher is calmer skin","ipl"],
+   ["Under-eye brightness",clamp(50+(under-cheek)*2.5),"Shadows and hollows","eyes"],
+   ["Lip fullness",clamp(lipH/lipW*230),"Lip height to width ratio","lips"],
+   ["Facial symmetry",clamp(100-asym*900),"Left to right balance",null]
+  ];
+  const word=v=>v>=75?"Great":v>=55?"Good":v>=40?"Fair":"Focus area";
+  $("analysis").innerHTML=M.map(m=>`<div class="met"><div>${m[0]}<em>${m[2]}</em></div><div style="display:flex;align-items:center;font-weight:600;font-size:13px">${word(m[1])}<div class="bar"><i style="width:${m[1]}%"></i></div></div></div>`).join("")+`<p class="disc" style="text-align:left">Cosmetic photo estimate only, not a medical assessment.</p>`;
+  M.filter(m=>m[1]<45&&m[3]).forEach(m=>selected.add(m[3]));syncChips();render();
+}
 // warm the model in the background once consent is checked
 $("consent").addEventListener("change",()=>{getLandmarker().catch(()=>{})},{once:true});
 </script>
