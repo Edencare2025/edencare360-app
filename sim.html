@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b35b13">
+<title>Preview Your Results | EdenCare 360</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#b35b13;--dark:#2b1d14;--cream:#faf6f1;--sand:#efe3d3;--ink:#2a2420;--muted:#76695f;--line:#e8ddd0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Roboto,system-ui,sans-serif;background:#ece5dc;color:var(--ink);display:flex;justify-content:center}
+.app{width:100%;max-width:460px;min-height:100vh;background:var(--cream);padding-bottom:40px}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:10px}
+header a.back{font-size:22px;color:var(--brand);text-decoration:none;padding-right:4px}
+header img{width:34px}
+header b{color:var(--brand);font-size:17px}
+.pad{padding:18px}
+h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;line-height:1.15;margin-bottom:6px}
+h2{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;margin:18px 0 8px}
+.sub{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;background:var(--brand);color:#fff;font-weight:600;font-size:15px;padding:13px 16px;border-radius:12px;text-decoration:none;font-family:inherit;cursor:pointer;width:100%}
+.btn.ghost{background:transparent;border:1.5px solid var(--brand);color:var(--brand)}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.ok{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;margin:8px 0}
+.ok span{color:var(--brand);font-weight:700}
+label.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;background:var(--sand);padding:12px;border-radius:12px;margin:12px 0}
+label.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);flex-shrink:0}
+.cmp{position:relative;width:100%;border-radius:16px;overflow:hidden;background:#000;touch-action:none;user-select:none}
+.cmp canvas{display:block;width:100%;height:auto}
+.cmp .before{position:absolute;inset:0;overflow:hidden}
+.cmp .before canvas{position:absolute;left:0;top:0}
+.cmp .bar{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,.4)}
+.cmp .knob{position:absolute;top:50%;width:36px;height:36px;margin:-18px 0 0 -17px;border-radius:50%;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.tag{position:absolute;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;padding:4px 8px;border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:#fff;padding:9px 12px;border-radius:20px;font-size:13.5px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{flex:1;border:none;background:none;padding:9px;border-radius:9px;font-family:inherit;font-size:13.5px;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--brand);color:#fff;font-weight:600}
+.disc{font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;margin-top:12px}
+.status{font-size:13.5px;color:var(--muted);text-align:center;padding:24px 10px}
+.spin{width:28px;height:28px;border:3px solid var(--sand);border-top-color:var(--brand);border-radius:50%;animation:s 1s linear infinite;margin:0 auto 10px}
+@keyframes s{to{transform:rotate(360deg)}}
+.hide{display:none!important}
+.recs .item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.recs .item:last-child{border:none}
+.recs small{display:block;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><a class="back" href="./" aria-label="Back to app">‹</a><img src="logo.png" alt=""><b>Preview Your Results</b></header>
+
+<!-- STEP 1: intro + consent -->
+<section id="s1" class="pad">
+  <h1>See a preview before you book</h1>
+  <p class="sub">Upload a selfie and see an illustration of how common treatments can soften lines, restore volume and refresh skin.</p>
+  <div class="card">
+    <div class="ok"><span>✓</span><div><b>Private by design.</b> Your photo is processed on your own phone. It is never uploaded, sent to us or saved anywhere.</div></div>
+    <div class="ok"><span>✓</span><div><b>Free</b> and takes under a minute.</div></div>
+    <div class="ok"><span>✓</span><div>For best results: face the camera, good light, no glasses, hair off your face.</div></div>
+  </div>
+  <label class="chk"><input type="checkbox" id="consent"> <span>I understand this is a computer-generated illustration only. It is not a medical evaluation, prediction or guarantee of results. Actual results vary from person to person, and only a consultation with Dr. Edwards can determine which treatments are right for me.</span></label>
+  <input type="file" id="file" accept="image/*" class="hide">
+  <input type="file" id="cam" accept="image/*" capture="user" class="hide">
+  <div class="row">
+    <button class="btn" id="takeBtn" disabled>📷 Take a selfie</button>
+    <button class="btn ghost" id="pickBtn" disabled>Upload photo</button>
+  </div>
+</section>
+
+<!-- STEP 2: loading -->
+<section id="s2" class="pad hide"><div class="status"><div class="spin"></div><span id="loadMsg">Finding your facial features…</span></div></section>
+
+<!-- STEP 3: editor -->
+<section id="s3" class="pad hide">
+  <div class="cmp" id="cmp">
+    <canvas id="after"></canvas>
+    <div class="before" id="beforeWrap"><canvas id="before"></canvas></div>
+    <span class="tag" style="left:10px">BEFORE</span><span class="tag" style="right:10px">PREVIEW</span>
+    <div class="bar" id="bar"><div class="knob">↔</div></div>
+  </div>
+  <p class="disc" style="margin-top:8px">Drag the slider to compare.</p>
+  <h2>Choose treatments</h2>
+  <div class="chips" id="chips"></div>
+  <h2>Intensity</h2>
+  <div class="seg" id="seg"><button data-v="0.6">Subtle</button><button data-v="1" class="on">Natural</button><button data-v="1.4">Noticeable</button></div>
+  <div class="card recs" style="margin-top:16px" id="recs"></div>
+  <div class="row" style="margin-top:4px">
+    <a class="btn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book a consultation</a>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <button class="btn ghost" id="saveBtn">Save my preview</button>
+    <button class="btn ghost" id="againBtn">New photo</button>
+  </div>
+  <a class="btn ghost" style="margin-top:10px" href="https://pay.withcherry.com/edencare-360-medspa--wellness" target="_blank" rel="noopener">💳 Check payment options with Cherry</a>
+  <p class="disc">Illustration only. Not a prediction or guarantee of results. Results vary. Treatment recommendations are made only after an in-person consultation with a licensed provider. Your photo never leaves your device.</p>
+</section>
+
+<!-- error -->
+<section id="sErr" class="pad hide"><div class="card"><b>We couldn't find a face in that photo.</b><p class="sub" style="margin:8px 0 12px">Try a well-lit, front-facing selfie with your whole face visible.</p><button class="btn" onclick="reset()">Try again</button></div></section>
+</div>
+
+<script type="module">
+import {FaceLandmarker, FilesetResolver} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.3/vision_bundle.mjs";
+
+const $=id=>document.getElementById(id);
+const show=id=>["s1","s2","s3","sErr"].forEach(s=>$(s).classList.toggle("hide",s!==id));
+let landmarker=null, srcCanvas=null, P=null, W=0, H=0, intensity=1;
+const selected=new Set(["tox"]);
+
+const TREAT=[
+ {k:"tox",n:"Wrinkle relaxer",t:"Botox, Xeomin or Daxxify",p:"from $13/unit"},
+ {k:"lips",n:"Lip filler",t:"Revanesse Lips",p:"from $820/syringe"},
+ {k:"cheeks",n:"Cheek volume",t:"Radiesse or Revanesse Versa",p:"from $750/syringe"},
+ {k:"skin",n:"Smoother skin",t:"CO2 laser, microneedling or VI Peel",p:"from $300"},
+ {k:"ipl",n:"Clearer tone",t:"Lumecca IPL for spots and redness",p:"Black Friday $199"},
+ {k:"eyes",n:"Brighter under-eyes",t:"PRF under-eye (EZ Gel)",p:"from $700"},
+ {k:"jaw",n:"Tighter jawline",t:"Morpheus8 or QuantumRF",p:"Morpheus8 3-pack $3,000"}
+];
+
+// MediaPipe landmark groups
+const OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+const LEYE=[33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246];
+const REYE=[362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];
+const LBROW=[70,63,105,66,107,55,65,52,53,46];
+const RBROW=[336,296,334,293,300,276,283,282,295,285];
+const LIPS=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185];
+const FOREHEAD=[54,103,67,109,10,338,297,332,284,300,293,334,296,336,9,107,66,105,63,70];
+const NOSE=[168,193,245,128,114,217,198,209,49,64,98,97,2,326,327,294,279,429,420,437,343,357,465,417];
+
+// ---------- UI wiring ----------
+$("consent").onchange=e=>{$("takeBtn").disabled=$("pickBtn").disabled=!e.target.checked};
+$("takeBtn").onclick=()=>$("cam").click();
+$("pickBtn").onclick=()=>$("file").click();
+$("file").onchange=e=>e.target.files[0]&&load(e.target.files[0]);
+$("cam").onchange=e=>e.target.files[0]&&load(e.target.files[0]);
+$("againBtn").onclick=()=>reset();
+window.reset=()=>{$("file").value="";$("cam").value="";show("s1")};
+$("seg").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("seg").children].forEach(x=>x.classList.toggle("on",x===b));intensity=+b.dataset.v;render()};
+$("chips").innerHTML=TREAT.map(t=>`<button class="chip ${selected.has(t.k)?"on":""}" data-k="${t.k}">${t.n}</button>`).join("");
+$("chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const k=b.dataset.k;selected.has(k)?selected.delete(k):selected.add(k);b.classList.toggle("on");render()};
+$("saveBtn").onclick=()=>{
+  const c=document.createElement("canvas");c.width=W*2;c.height=H+40;const x=c.getContext("2d");
+  x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(srcCanvas,0,0);x.drawImage($("after"),W,0);
+  x.fillStyle="#2a2420";x.font="bold 16px sans-serif";x.fillText("Before",10,H+26);x.fillText("Preview (illustration only)",W+10,H+26);
+  const a=document.createElement("a");a.download="edencare360-preview.jpg";a.href=c.toDataURL("image/jpeg",.9);a.click();
+};
+
+// compare slider
+let pos=.5;
+function setPos(p){pos=Math.max(0,Math.min(1,p));$("beforeWrap").style.width=(pos*100)+"%";$("bar").style.left=`calc(${pos*100}% - 1px)`}
+function drag(e){const r=$("cmp").getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;setPos(x/r.width)}
+$("cmp").addEventListener("pointerdown",e=>{drag(e);$("cmp").setPointerCapture(e.pointerId)});
+$("cmp").addEventListener("pointermove",e=>{if(e.buttons)drag(e)});
+
+async function getLandmarker(){
+  if(landmarker) return landmarker;
+  const fs=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.3/wasm");
+  landmarker=await FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"},runningMode:"IMAGE",numFaces:1});
+  return landmarker;
+}
+
+async function load(file){
+  show("s2");$("loadMsg").textContent="Finding your facial features…";
+  try{
+    const bmp=await createImageBitmap(file,{imageOrientation:"from-image"});
+    const max=720, sc=Math.min(1,max/Math.max(bmp.width,bmp.height));
+    W=Math.round(bmp.width*sc);H=Math.round(bmp.height*sc);
+    srcCanvas=document.createElement("canvas");srcCanvas.width=W;srcCanvas.height=H;srcCanvas.getContext("2d").drawImage(bmp,0,0,W,H);
+    const lm=await getLandmarker();
+    const res=lm.detect(srcCanvas);
+    if(!res.faceLandmarks||!res.faceLandmarks.length){show("sErr");return}
+    P=res.faceLandmarks[0].map(p=>({x:p.x*W,y:p.y*H}));
+    for(const id of ["before","after"]){$(id).width=W;$(id).height=H}
+    $("before").getContext("2d").drawImage(srcCanvas,0,0);
+    $("before").style.width=$("cmp").clientWidth+"px";
+    show("s3");$("before").style.width=$("cmp").clientWidth+"px";setPos(.5);render();
+  }catch(err){console.log(err);$("loadMsg").textContent="Something went wrong loading the preview tool. Please check your connection and try again.";setTimeout(()=>show("sErr"),2500)}
+}
+window.addEventListener("resize",()=>{if(P)$("before").style.width=$("cmp").clientWidth+"px"});
+
+// ---------- image helpers ----------
+const pt=i=>P[i];
+const mid=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function poly(ctx,idx){ctx.beginPath();idx.forEach((i,n)=>{const p=pt(i);n?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.closePath()}
+function canvas(w=W,h=H){const c=document.createElement("canvas");c.width=w;c.height=h;return c}
+// soft blur that works on every browser (downscale then upscale)
+function softBlur(src,factor){const sw=Math.max(8,Math.round(W*factor)),sh=Math.max(8,Math.round(H*factor));const s=canvas(sw,sh),sx=s.getContext("2d");sx.imageSmoothingQuality="high";sx.drawImage(src,0,0,sw,sh);const s2=canvas(Math.max(4,sw>>1),Math.max(4,sh>>1));s2.getContext("2d").drawImage(s,0,0,s2.width,s2.height);const o=canvas(),ox=o.getContext("2d");ox.imageSmoothingQuality="high";ox.drawImage(s2,0,0,W,H);return o}
+// feathered mask from a drawing function
+function mask(draw,feather){const m=canvas(),mx=m.getContext("2d");mx.fillStyle="#fff";draw(mx);const f=Math.max(.02,Math.min(.25,1/feather));return softBlur(m,f)}
+function faceMask(){const fw=dist(pt(234),pt(454));return mask(x=>{poly(x,OVAL);x.fill();x.globalCompositeOperation="destination-out";[LEYE,REYE,LBROW,RBROW,LIPS].forEach(g=>{poly(x,g);x.fill()});[LEYE,REYE].forEach(g=>{const c=centroid(g);x.beginPath();x.ellipse(c.x,c.y,eyeW()*0.75,eyeW()*0.45,0,0,7);x.fill()});x.globalCompositeOperation="source-over"},fw/14)}
+function centroid(g){let x=0,y=0;g.forEach(i=>{x+=P[i].x;y+=P[i].y});return{x:x/g.length,y:y/g.length}}
+const eyeW=()=>(dist(pt(33),pt(133))+dist(pt(362),pt(263)))/2;
+// composite effect through mask onto ctx
+function apply(ctx,effect,m,alpha){const t=canvas(),tx=t.getContext("2d");tx.drawImage(effect,0,0);tx.globalCompositeOperation="destination-in";tx.drawImage(m,0,0);ctx.save();ctx.globalAlpha=Math.min(1,alpha);ctx.drawImage(t,0,0);ctx.restore()}
+// pixel warp: fn(x,y) returns source coords
+function warp(ctx,box,fn){
+  const x0=Math.max(0,Math.floor(box.x0)),y0=Math.max(0,Math.floor(box.y0)),x1=Math.min(W,Math.ceil(box.x1)),y1=Math.min(H,Math.ceil(box.y1));
+  const w=x1-x0,h=y1-y0;if(w<2||h<2)return;
+  const src=ctx.getImageData(0,0,W,H).data;const out=ctx.getImageData(x0,y0,w,h);const d=out.data;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const s=fn(x+x0,y+y0);if(!s)continue;
+    let sx=Math.max(0,Math.min(W-1.001,s.x)),sy=Math.max(0,Math.min(H-1.001,s.y));
+    const ix=sx|0,iy=sy|0,fx=sx-ix,fy=sy-iy,o=(y*w+x)*4;
+    for(let c=0;c<3;c++){const a=src[(iy*W+ix)*4+c],b=src[(iy*W+ix+1)*4+c],e=src[((iy+1)*W+ix)*4+c],f=src[((iy+1)*W+ix+1)*4+c];d[o+c]=(a*(1-fx)+b*fx)*(1-fy)+(e*(1-fx)+f*fx)*fy}
+  }
+  ctx.putImageData(out,x0,y0);
+}
+function bulge(ctx,c,rx,ry,sx,sy,lift=0){
+  warp(ctx,{x0:c.x-rx,y0:c.y-ry,x1:c.x+rx,y1:c.y+ry},(x,y)=>{
+    const dx=x-c.x,dy=y-c.y,r=Math.sqrt((dx/rx)**2+(dy/ry)**2);if(r>=1)return null;
+    const f=(1-r)*(1-r);return{x:c.x+dx/(1+sx*f),y:c.y+dy/(1+sy*f)+lift*f};
+  });
+}
+// tone tweak on masked region (per pixel)
+function tone(ctx,m,fn){const img=ctx.getImageData(0,0,W,H),d=img.data;const md=m.getContext("2d").getImageData(0,0,W,H).data;const bl=softBlur(ctx.canvas,.04).getContext("2d").getImageData(0,0,W,H).data;
+  for(let i=0;i<d.length;i+=4){const a=md[i]/255;if(a<.02)continue;const r=fn(d[i],d[i+1],d[i+2],bl[i],bl[i+1],bl[i+2]);d[i]+= (r[0]-d[i])*a;d[i+1]+=(r[1]-d[i+1])*a;d[i+2]+=(r[2]-d[i+2])*a}
+  ctx.putImageData(img,0,0)}
+const lum=(r,g,b)=>.299*r+.587*g+.114*b;
+
+// ---------- render ----------
+function render(){
+  if(!P)return;
+  const out=$("after"),ctx=out.getContext("2d",{willReadFrequently:true});
+  ctx.drawImage(srcCanvas,0,0);
+  const k=intensity, fw=dist(pt(234),pt(454));
+  // shape changes first
+  if(selected.has("lips")){
+    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;LIPS.forEach(i=>{const p=pt(i);x0=Math.min(x0,p.x);y0=Math.min(y0,p.y);x1=Math.max(x1,p.x);y1=Math.max(y1,p.y)});
+    const c={x:(x0+x1)/2,y:(y0+y1)/2};bulge(ctx,c,(x1-x0)*0.75,(y1-y0)*1.25,0.10*k,0.42*k);
+  }
+  if(selected.has("cheeks")){
+    [[pt(50),pt(205)],[pt(280),pt(425)]].forEach(([a,b])=>{const c=mid(a,b);bulge(ctx,c,fw*0.17,fw*0.15,0.14*k,0.14*k,-fw*0.012*k)});
+  }
+  if(selected.has("jaw")){
+    const cx=(pt(234).x+pt(454).x)/2;
+    [172,136,150,397,365,379].forEach(i=>{const p=pt(i),dir=Math.sign(p.x-cx),R=fw*0.13,amt=fw*0.022*k;
+      warp(ctx,{x0:p.x-R,y0:p.y-R,x1:p.x+R,y1:p.y+R},(x,y)=>{const r=Math.hypot(x-p.x,y-p.y)/R;if(r>=1)return null;const f=(1-r)*(1-r);return{x:x+dir*amt*f,y:y+amt*0.35*f}})});
+  }
+  // texture and tone
+  const base=canvas();base.getContext("2d").drawImage(out,0,0);
+  if(selected.has("tox")){
+    const blur=softBlur(base,.05);
+    const m=mask(x=>{poly(x,FOREHEAD);x.fill();[[33,133],[263,362]].forEach(([o,i])=>{const a=pt(o),b=pt(i),dx=a.x-b.x,dy=a.y-b.y;x.beginPath();x.ellipse(a.x+dx*0.45,a.y+dy*0.45+eyeW()*0.1,eyeW()*0.5,eyeW()*0.45,0,0,7);x.fill()});x.globalCompositeOperation="destination-out";[LBROW,RBROW,LEYE,REYE].forEach(g=>{poly(x,g);x.fill()})},fw/12);
+    apply(ctx,blur,m,0.55*k);
+  }
+  if(selected.has("skin")||selected.has("jaw")){
+    const blur=softBlur(out,.06);apply(ctx,blur,faceMask(),(selected.has("skin")?0.45:0.25)*k);
+  }
+  if(selected.has("ipl")||selected.has("skin")){
+    const m=faceMask(),s=(selected.has("ipl")?1:0.5)*k;
+    tone(ctx,m,(r,g,b,br,bg,bb)=>{
+      const L=lum(r,g,b),BL=lum(br,bg,bb);let R=r,G=g,B=b;
+      if(BL-L>6){const t=Math.min(1,(BL-L)/30)*0.7*s;R+=(br-r)*t;G+=(bg-g)*t;B+=(bb-b)*t}   // fade spots
+      const red=R-(G+B)/2;if(red>18){const t=Math.min(.35,(red-18)/120)*s;R-=red*t*0.6}         // calm redness
+      const lift=1+0.035*s;return[R*lift,G*lift,B*lift];
+    });
+  }
+  if(selected.has("eyes")){
+    const m=mask(x=>{[[145,159],[374,386]].forEach(([lo,up])=>{const a=pt(lo),c={x:a.x,y:a.y+eyeW()*0.32};x.beginPath();x.ellipse(c.x,c.y,eyeW()*0.62,eyeW()*0.3,0,0,7);x.fill()});x.globalCompositeOperation="destination-out";[LEYE,REYE].forEach(g=>{poly(x,g);x.fill()})},fw/16);
+    const blur=softBlur(out,.05);apply(ctx,blur,m,0.5*k);
+    tone(ctx,m,(r,g,b)=>{const f=1+0.07*k;return[r*f,g*f,b*f*1.01]});
+  }
+  // recommendations
+  const chosen=TREAT.filter(t=>selected.has(t.k));
+  $("recs").innerHTML=chosen.length?`<b style="font-size:14px">Treatments in this preview</b>`+chosen.map(t=>`<div class="item"><div>${t.n}<small>${t.t}</small></div><div style="font-weight:600;font-size:13px;text-align:right">${t.p}</div></div>`).join(""):`<span class="sub">Choose a treatment above to see a preview.</span>`;
+}
+window.__load=load; // used for automated testing
+// warm the model in the background once consent is checked
+$("consent").addEventListener("change",()=>{getLandmarker().catch(()=>{})},{once:true});
+</script>
+</body>
+</html>
