@@ -1,10 +1,11 @@
 // Sends app sign-ups and consult requests to LeadAR (inbound webhook workflow). No photos are ever sent.
-window.EDEN_LEAD_URL = "__LEADAR_WEBHOOK__";
+window.EDEN_LEAD_URL = "https://services.leadconnectorhq.com/hooks/Fyy2jgpDdZm98SoKsis3/webhook-trigger/scScTRwmhfZsHjJT9Xyv";
 window.sendLead = async function(data){
   const payload = Object.assign({source:"EdenCare 360 App", submitted_at:new Date().toISOString()}, data);
   try{
     if(!/^https:/.test(window.EDEN_LEAD_URL)) throw new Error("no endpoint");
-    await fetch(window.EDEN_LEAD_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)});
+    const r=await fetch(window.EDEN_LEAD_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    if(!r.ok) throw new Error("status "+r.status);
     try{localStorage.setItem("eden_member",JSON.stringify({first:payload.first_name||"",at:payload.submitted_at}))}catch(e){}
     return true;
   }catch(e){console.log(e);return false}
