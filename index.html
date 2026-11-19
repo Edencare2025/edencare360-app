@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b35b13">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="icon" href="logo.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EdenCare 360">
+<title>EdenCare 360 App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#b35b13;--brand2:#c96f22;--dark:#2b1d14;--cream:#faf6f1;--sand:#efe3d3;--sand2:#e3d0b8;--ink:#2a2420;--muted:#76695f;--line:#e8ddd0;--white:#fff;--ok:#3f6b4a}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Roboto,system-ui,sans-serif;background:#ece5dc;color:var(--ink);display:flex;justify-content:center}
+.app{width:100%;max-width:460px;min-height:100vh;background:var(--cream);position:relative;box-shadow:0 0 40px rgba(0,0,0,.08)}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top)) 18px 12px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;color:var(--brand);font-size:19px;letter-spacing:.2px}
+.logo small{display:block;font-weight:400;color:var(--muted);font-size:11px;letter-spacing:.5px}
+.hbtn{background:var(--brand);color:#fff;border:none;border-radius:20px;padding:9px 14px;font-weight:600;font-size:13px;text-decoration:none;font-family:inherit}
+main{padding:0 0 calc(92px + env(safe-area-inset-bottom))}
+.view{display:none}.view.active{display:block;animation:f .2s ease}
+@keyframes f{from{opacity:0}to{opacity:1}}
+.pad{padding:18px}
+.hero{background:linear-gradient(160deg,var(--dark),#4a2f1b 55%,var(--brand));color:#fff;padding:26px 20px 24px}
+.hero h1{font-family:'Playfair Display',serif;font-size:27px;line-height:1.15;font-weight:600;margin-bottom:8px}
+.hero p{font-size:14px;opacity:.9;line-height:1.5;margin-bottom:16px}
+.hero .row{display:flex;gap:10px}
+.stars{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:16px;font-size:12.5px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;background:var(--brand);color:#fff;font-weight:600;font-size:14px;padding:12px 16px;border-radius:12px;text-decoration:none;font-family:inherit;cursor:pointer;text-align:center}
+.btn.light{background:#fff;color:var(--brand)}
+.btn.ghost{background:transparent;border:1.5px solid var(--brand);color:var(--brand)}
+.btn.sm{padding:8px 12px;font-size:12.5px;border-radius:10px}
+.btn.block{display:flex;width:100%}
+h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;margin:22px 0 4px}
+.sec-sub{font-size:13px;color:var(--muted);margin-bottom:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 18px 6px;margin:0 -18px;scrollbar-width:none;scroll-snap-type:x mandatory}
+.hscroll::-webkit-scrollbar{display:none}
+.tile{min-width:150px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;scroll-snap-align:start;cursor:pointer}
+.tile b{display:block;font-size:14px;margin-bottom:4px}
+.tile .p{font-size:15px;font-weight:700;color:var(--ink)}
+.tile .m{font-size:11.5px;color:var(--ok);font-weight:600}
+.mtile{min-width:170px;background:linear-gradient(150deg,#fff,var(--sand));}
+.perks{background:var(--sand);border-radius:16px;padding:16px;margin-top:6px}
+.perks li{list-style:none;font-size:13.5px;padding:4px 0 4px 22px;position:relative}
+.perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:700}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 10px}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;padding:8px 13px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.item p{font-size:12.5px;color:var(--muted);line-height:1.45}
+.price{text-align:right;white-space:nowrap}
+.price b{font-size:16px;display:block}
+.price s{font-size:12px;color:var(--muted)}
+.price small{display:block;font-size:11px;color:var(--ok);font-weight:600;margin-top:2px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--sand);color:var(--brand);padding:3px 8px;border-radius:8px;margin-bottom:6px}
+.tag.hot{background:var(--brand);color:#fff}
+.disc{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.disc .top{padding:16px 16px 12px;border-left:4px solid var(--brand)}
+.disc h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;margin-bottom:6px;line-height:1.25}
+.disc p{font-size:13.5px;color:var(--muted);line-height:1.5}
+.disc .act{display:flex;gap:8px;padding:0 16px 14px}
+.tier{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px;position:relative}
+.tier.pop{border:2px solid var(--brand)}
+.tier .badge{position:absolute;top:-10px;right:14px;background:var(--brand);color:#fff;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:9px;letter-spacing:.5px}
+.tier h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:600}
+.tier .amt{font-size:26px;font-weight:700;margin:6px 0 2px}
+.tier .amt small{font-size:13px;color:var(--muted);font-weight:400}
+.tier .fine{font-size:12px;color:var(--muted);margin-bottom:10px}
+.tier p.d{font-size:13.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.tier ul{list-style:none;margin-bottom:14px}
+.tier li{font-size:13.5px;padding:4px 0 4px 22px;position:relative}
+.tier li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:700}
+.bank{display:flex;gap:8px;margin:10px 0 12px}
+.bank div{flex:1;background:var(--sand);border-radius:12px;padding:10px;text-align:center}
+.bank b{display:block;font-size:18px;color:var(--brand)}
+.bank span{font-size:11px;color:var(--muted)}
+.ladder{position:relative;padding-left:26px}
+.ladder:before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--sand2)}
+.rung{position:relative;padding:8px 0 12px}
+.rung:before{content:"";position:absolute;left:-22px;top:12px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--brand)}
+.rung .v{font-size:11.5px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.5px}
+.rung b{display:block;font-size:14.5px;margin-top:2px}
+.rung small{font-size:12px;color:var(--muted)}
+.big-num{font-size:30px;font-weight:700;color:var(--brand)}
+.q-opt{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-size:14.5px}
+.q-opt.on{border-color:var(--brand);background:#fbf3ea}
+.q-opt .box{width:20px;height:20px;border-radius:6px;border:2px solid var(--sand2);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.q-opt.on .box{background:var(--brand);border-color:var(--brand)}
+.rec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.rec h4{font-size:15px;margin-bottom:4px}
+.rec p{font-size:13px;color:var(--muted);line-height:1.45}
+.rec .why{font-size:11.5px;color:var(--brand);font-weight:600;margin-top:6px}
+.note{font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;margin-top:12px}
+.info p{font-size:14px;line-height:1.6}
+.info .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-top:10px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:460px;background:#fff;border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:10}
+nav button{flex:1;background:none;border:none;font-family:inherit;font-size:10.5px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;cursor:pointer}
+nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav button.on{color:var(--brand);font-weight:700}
+.overlay{position:fixed;inset:0;background:rgba(30,20,12,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.overlay.show{display:flex}
+.sheet{background:var(--cream);width:100%;max-width:460px;border-radius:22px 22px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));max-height:86vh;overflow-y:auto}
+.sheet h2{margin-top:0}
+.toast{position:fixed;top:calc(70px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:11px 16px;border-radius:12px;font-size:13.5px;z-index:30;display:none;max-width:90%;text-align:center}
+.banner{background:var(--brand);color:#fff;font-size:12.5px;text-align:center;padding:9px 14px;cursor:pointer}
+.banner b{text-decoration:underline}
+.paybar{display:block;background:var(--sand);color:var(--ink);font-size:12.5px;text-align:center;padding:9px 14px;text-decoration:none;border-bottom:1px solid var(--line)}
+.paybar u{color:var(--brand);font-weight:600}
+.welcome{background:#f3f1ee;border-radius:20px;overflow:hidden;margin-top:4px}
+.welcome img{display:block;width:100%;height:300px;object-fit:cover;object-position:center 30%}
+.wtxt{padding:18px 18px 20px}
+.wtxt h1{font-family:'Playfair Display',serif;font-size:28px;line-height:1.12;font-weight:500;margin-bottom:8px;color:#1f2a2a}
+.wtxt p{font-size:14px;color:#4a4a4a;line-height:1.5;margin-bottom:14px}
+.stars2{font-size:12px;color:var(--brand);font-weight:600;margin-bottom:8px}
+.fin{display:block;font-size:11.5px;color:var(--brand);font-weight:600;margin-top:4px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div style="display:flex;align-items:center;gap:10px"><img src="logo.png" alt="EdenCare 360" style="width:40px;height:auto"><div class="logo">EdenCare 360<small>MedSpa &amp; Wellness</small></div></div>
+  <a class="hbtn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book</a>
+</header>
+
+<main>
+<!-- HOME -->
+<section class="view active" id="home">
+  <div class="banner" onclick="go('shop');setShop('Specials')">Black Friday specials end Nov 30. <b>Shop now</b></div>
+  <a class="paybar" href="https://pay.withcherry.com/edencare-360-medspa--wellness" target="_blank" rel="noopener"><b>Treat today. Pay later.</b> Monthly payments with Cherry. <u>Check your options</u></a>
+  <div class="pad" style="padding-bottom:0">
+    <div class="welcome">
+      <img src="hero.jpg" alt="Smiling women with healthy skin">
+      <div class="wtxt">
+        <div class="stars2">★★★★★ 5.0 on Google · 30 reviews</div>
+        <h1>Welcome to EdenCare 360 MedSpa</h1>
+        <p>Your destination for quality healthcare. Physician-led aesthetics and wellness in Tangent, Oregon. Experience the difference today!</p>
+        <div class="row">
+          <a class="btn" href="https://edencare360medspa.myaestheticrecord.com/online-booking" target="_blank" rel="noopener">Book appointment</a>
+          <button class="btn ghost" onclick="go('quiz')">Find my treatment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pad">
+    <a class="card" href="https://pay.withcherry.com/edencare-360-medspa--wellness" target="_blank" rel="noopener" style="display:flex;gap:12px;align-items:center;background:var(--sand);border:none;text-decoration:none;color:var(--ink)">
+      <div style="font-size:26px">💳</div>
+      <div style="font-size:13.5px;line-height:1.45;flex:1"><b>Finance your treatment with Cherry</b><br>Soft credit check, no impact to your score. See your monthly options in minutes.</div>
+      <span class="btn sm">Apply</span>
+    </a>
+    <div class="card" style="margin-top:-4px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px">3 ways to pay over time</div>
+      <div class="item" style="padding:6px 0;border-bottom:1px solid var(--line)"><div><h3 style="font-size:14px">Cherry</h3><p>Apply online now, soft credit check.</p></div><a class="btn sm" href="https://pay.withcherry.com/edencare-360-medspa--wellness" target="_blank" rel="noopener">Apply</a></div>
+      <div class="item" style="padding:8px 0;border-bottom:1px solid var(--line)"><div><h3 style="font-size:14px">Affirm</h3><p>Available at checkout.</p></div><a class="btn sm ghost" href="https://edencare360medspa.myaestheticrecord.com/online-booking/promotions" target="_blank" rel="noopener">Shop</a></div>
+      <div class="item" style="padding:8px 0 0"><div><h3 style="font-size:14px">Sunbit</h3><p>Available at checkout.</p></div><a class="btn sm ghost" href="https://edencare360medspa.myaestheticrecord.com/online-booking/promotions" target="_blank" rel="noopener">Shop</a></div>
+    </div>
+
+    <h2>Become a member</h2>
+    <div class="sec-sub">Bank credit every month and save on every visit.</div>
+    <div class="hscroll" id="homeMembers"></div>
+    <div class="perks"><b style="font-size:13px;letter-spacing:.6px">MEMBERSHIP PERKS INCLUDE</b>
+      <ul style="margin-top:6px"><li>Up to $100 towards fillers, PRP or PRF services</li><li>Up to 25% off IV therapy</li><li>Up to 15% savings on products and services</li></ul>
+      <button class="btn block" style="margin-top:10px" onclick="go('members')">Compare all 6 memberships</button>
+    </div>
+
+    <h2>Best-selling services</h2>
+    <div class="sec-sub">Member pricing shown at our top tier.</div>
+    <div class="hscroll" id="homeBest"></div>
+
+    <h2>Black Friday specials</h2>
+    <div class="sec-sub">Buy by Nov 30, book any time through March.</div>
+    <div class="hscroll" id="homeSpecials"></div>
+
+    <h2>Browse by concern</h2>
+    <div class="sec-sub">Not sure what you need? Start with what bothers you.</div>
+    <div class="chips" id="homeConcerns" style="flex-wrap:wrap"></div>
+
+    <h2>Earn rewards</h2>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="big-num">$25</div><div style="font-size:13px;color:var(--muted)">towards your first treatment</div></div>
+      <button class="btn sm" onclick="go('rewards')">See rewards</button>
+    </div>
+
+    <h2>Visit us</h2>
+    <div class="card info">
+      <p><b>31978 N Lake Creek Dr, Tangent, OR 97389</b><br><span style="color:var(--muted);font-size:13px">Enter from North Lake Creek Road. There is no driveway from Hwy 99E.</span></p>
+      <div class="lbl">Hours</div><p>Tuesday to Friday, from 10 a.m.<br>Monday and Saturday by appointment only<br>Closed Sunday</p>
+      <div class="lbl">Call or text</div><p><a href="tel:+15412037533" style="color:var(--brand);font-weight:600">(541) 203-7533</a></p>
+      <div class="row" style="margin-top:12px">
+        <a class="btn sm ghost" href="https://edencare360.com" target="_blank" rel="noopener">Website</a>
+        <a class="btn sm ghost" href="https://www.instagram.com/edencare360" target="_blank" rel="noopener">Instagram</a>
+        <a class="btn sm ghost" href="https://www.google.com/maps/search/?api=1&query=31978+N+Lake+Creek+Dr+Tangent+OR+97389" target="_blank" rel="noopener">Directions</a>
+      </div>
+    </div>
+    <button class="btn ghost block" onclick="openInstall()">📲 Add this app to your home screen</button>
+  </div>
+</section>
+
+<!-- DISCOVER -->
+<section class="view" id="discover">
+  <div class="pad">
+    <h2 style="margin-top:4px">Discover</h2>
+    <div class="sec-sub">Treatments, offers and ways to save, from Dr. Edwards.</div>
+    <div id="discList"></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="view" id="shop">
+  <div class="pad">
+    <h2 style="margin-top:4px">Shop</h2>
+    <div class="sec-sub">Purchases are completed securely in our booking portal.</div>
+    <div class="chips" id="shopTabs"></div>
+    <div id="concernFilter"></div>
+    <div id="shopList"></div>
+  </div>
+</section>
+
+<!-- MEMBERS -->
+<section class="view" id="members">
+  <div class="pad">
+    <h2 style="margin-top:4px">Memberships</h2>
+    <div class="sec-sub">All memberships have a 3-month commitment. Join securely in our booking portal.</div>
+    <div id="tierList"></div>
+    <p class="note">Full terms are shown at checkout. Additional charges may apply.</p>
+  </div>
+</section>
+
+<!-- REWARDS -->
+<section class="view" id="rewards">
+  <div class="pad">
+    <h2 style="margin-top:4px">Eden Rewards</h2>
+    <div class="sec-sub">The more you visit, the more you unlock. Rewards are added to your Patient Wallet by our front desk and applied at checkout. Wallet credits are valid for 12 months.</div>
+    <div class="card" style="background:var(--dark);color:#fff;border:none">
+      <div style="font-size:12px;letter-spacing:1px;opacity:.75">WELCOME REWARD</div>
+      <div style="font-size:30px;font-weight:700;margin:4px 0">$25 off</div>
+      <div style="font-size:13.5px;opacity:.85">your first treatment when you join</div>
+    </div>
+    <h2>Visit rewards</h2>
+    <div class="sec-sub">Unlocked by your total number of visits.</div>
+    <div class="ladder" id="ladder"></div>
+    <h2>Refer a friend</h2>
+    <div class="card">
+      <p style="font-size:14px;line-height:1.5">Earn <b>$30 in credit</b> for every friend who books and completes a treatment. Your credit is added to your Patient Wallet and applied at checkout. Your friend gets $25 off their first treatment.</p>
+      <button class="btn block" style="margin-top:12px" onclick="shareInvite()">Share EdenCare 360</button>
+    </div>
+    <h2>Brand rewards that stack</h2>
+    <div class="sec-sub">Free manufacturer programs you can use alongside ours.</div>
+    <div class="card"><div class="item"><div><h3>Allē</h3><p>Earn points on Botox and other Allergan treatments.</p></div><a class="btn sm" href="https://alle.com" target="_blank" rel="noopener">Join</a></div></div>
+    <div class="card"><div class="item"><div><h3>Xperience Rewards</h3><p>Merz's program for Xeomin and Radiesse.</p></div><a class="btn sm" href="https://www.xperiencemerz.com" target="_blank" rel="noopener">Join</a></div></div>
+    <div class="card"><div class="item"><div><h3>REVA Rewards</h3><p>For Daxxify and SkinPen. We enroll you at your visit in minutes.</p></div><button class="btn sm ghost" onclick="toast('Ask us to enroll you at your visit')">At visit</button></div></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="view" id="quiz">
+  <div class="pad">
+    <h2 style="margin-top:4px">Find your treatment</h2>
+    <div class="sec-sub" id="qSub">Pick everything you'd like to improve. Takes 30 seconds. Nothing you select is saved or sent.</div>
+    <div id="qBody"></div>
+  </div>
+</section>
+</main>
+
+<nav>
+  <button class="on" data-v="home" onclick="go('home')"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+  <button data-v="discover" onclick="go('discover')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>Discover</button>
+  <button data-v="shop" onclick="go('shop')"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Shop</button>
+  <button data-v="members" onclick="go('members')"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>Members</button>
+  <button data-v="rewards" onclick="go('rewards')"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1zm0 0c2-4 6-4 6-1s-6 1-6 1z"/></svg>Rewards</button>
+</nav>
+
+<div class="overlay" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const AR="https://edencare360medspa.myaestheticrecord.com/online-booking";
+const AR_MEM=AR+"/memberships", AR_PROMO=AR+"/promotions", AR_GIFT=AR+"/giftcards";
+const CHERRY="https://pay.withcherry.com/edencare-360-medspa--wellness";
+const OBAGI="https://www.obagi.com/?rfsn=8946841.221ea9&utm_source=refersion&utm_medium=affiliate&utm_campaign=8946841.221ea9";
+
+const MEMBERS=[
+ {n:"Eden Glow Beauty Bank",p:99,off:5,bank:99,desc:"Enjoy $99 in credit every month, or save it up for larger treatments, with member-only savings on your favorites.",perks:["$99 banked every month, spend it anytime","5% savings on all treatments","5% savings on all products","Sign-up bonus: B12 shot included"]},
+ {n:"Eden Radiance Beauty Bank",p:149,off:10,bank:149,pop:1,desc:"Receive $149 in credit every month to use right away or save for larger treatments, plus exclusive member perks.",perks:["$149 banked every month, spend it anytime","10% savings on all treatments","10% savings on all products","Sign-up bonus: B12 shot included"]},
+ {n:"Eden Elite Beauty Bank",p:199,off:15,bank:199,desc:"Our top tier. $199 in monthly credit for treatments now or later, with our best member savings.",perks:["$199 banked every month, spend it anytime","15% savings on all treatments","15% savings on all products","Sign-up bonus: B12 shot included"]},
+ {n:"Weight Loss Membership",p:99,setup:150,desc:"Physician-directed oral and injectable weight management with ongoing clinical support. A medical consultation determines eligibility.",perks:["Monthly telehealth consultation","Ongoing provider check-ins","Medication priced separately"]},
+ {n:"Exopod Club",p:299,desc:"Regular recovery and wellness sessions with priority booking and monthly upgrades.",perks:["4 Exopod Medical Detox sessions every month","PEMF upgrade included","10% savings on additional services and products","Priority booking","Invitations to member wellness events","Unused sessions roll over one month (up to 2)"]},
+ {n:"Hormone Replacement Program",p:119,setup:150,desc:"Personalized, physician-managed bioidentical hormone therapy for women and men.",perks:["Physician-managed hormone care","Ongoing monitoring and adjustments","Medication priced separately"]}
+];
+
+// cat, name, desc, price text, numeric price for member calc (null = no member line), concerns
+const P=[
+ ["Injectables","Botox","Relaxes targeted muscles to smooth forehead lines, frown lines and crow's feet while keeping your expression natural.","$15","/unit",15,["Wrinkles & lines","Brows & eyes"]],
+ ["Injectables","Xeomin","The purified neurotoxin with no unnecessary additives, injected by a physician who knows your facial anatomy.","$13","/unit",13,["Wrinkles & lines","Excessive sweating"]],
+ ["Injectables","Daxxify","The longest-lasting neurotoxin option for dynamic wrinkles.","$14","/unit",14,["Wrinkles & lines"]],
+ ["Injectables","Radiesse","Collagen-boosting filler to lift, sculpt and restore volume in cheeks, jawline and chin.","$800","/syringe",800,["Volume loss","Sagging skin"]],
+ ["Injectables","Revanesse Lips","Natural-looking lip definition, hydration and volume.","$820","/syringe",820,["Lips","Volume loss"]],
+ ["Injectables","Revanesse Versa","Versatile filler for cheeks, smile lines and lower face balance.","$750","/syringe",750,["Volume loss","Wrinkles & lines"]],
+ ["Skin","VI Peel","Medical-grade peels (Advance, Precision+ or Purify) for texture, tone and clarity.","from $425","",425,["Texture & pores","Dark spots & sun damage","Acne & breakouts"]],
+ ["Skin","Microneedling","Collagen induction for scars, fine lines and pores. With HA from $300, with VAMP $600.","from $300","",300,["Acne scars","Texture & pores","Wrinkles & lines"]],
+ ["Skin","CO2 Laser Resurfacing","Physician-performed fractional CO2 for acne scars, lip lines, stretch marks and sun damage. Small area $750, face or large area $1,450.","from $750","",750,["Acne scars","Wrinkles & lines","Dark spots & sun damage"]],
+ ["Skin","PRP / PRF Add-On","Pairs with CO2 laser to speed healing and reduce downtime.","$300","",300,["Acne scars"]],
+ ["Skin","PRF Treatments","The premium upgrade to PRP for under-eyes, full face and hair. Under-eye $700, full face $950.","from $700","",700,["Under-eye","Hair thinning","Texture & pores"]],
+ ["Body & Wellness","Exopod Medical Detox","Wellness pod session combining infrared, BioPulse and vibration for lymphatic drainage and recovery.","$199","",199,["Recovery & detox"]],
+ ["Body & Wellness","CryoShock Thermal Sculpt","Fat freezing plus heat for stubborn areas, with photo tracking. Packages available.","from $179","",null,["Stubborn fat"]],
+ ["Body & Wellness","IV Hydration","Customized drips for hydration, energy, glow and recovery.","from $199","",199,["Energy & recovery"]],
+ ["Body & Wellness","IV Add-ons","B12, magnesium, vitamin C, glutathione and more.","from $30","",null,["Energy & recovery"]],
+ ["Body & Wellness","Vitamin B-Complex Injection","Quick energy and metabolism support.","$80","",80,["Energy & recovery"]],
+ ["Weight Loss","Weight Loss (S), 10 to 12 weeks","Semaglutide vial, physician-prescribed and monitored. Consultation required.","$657","",null,["Weight"]],
+ ["Weight Loss","Weight Loss (T), 10 to 12 weeks","Tirzepatide vial, physician-prescribed and monitored. Consultation required.","$857","",null,["Weight"]],
+ ["Packages","Collagen Renewal Series","3 microneedling sessions with HA, plus a facial.","$975","",975,["Acne scars","Texture & pores","Wrinkles & lines"]],
+ ["Packages","VAMP Glow Booster Series","3 microneedling sessions with VAMP by Revanesse, plus a hydrating recovery facial.","$1,350","",1350,["Texture & pores","Wrinkles & lines"]],
+ ["Packages","Microneedling + VI Peel Advanced","Resurfacing synergy for tone, texture and fine lines.","$675","",675,["Texture & pores","Dark spots & sun damage"]],
+ ["Packages","Microneedling + VI Peel Purify + Peptides","Targets breakouts, pores and texture.","$675","",675,["Acne & breakouts","Texture & pores"]],
+ ["Packages","Microneedling + VI Peel Precision + Peptides","For pigment, melasma and sun damage.","$695","",695,["Dark spots & sun damage"]],
+ ["Packages","VI Peel Advanced + Botox","Full-face VI Peel Advanced plus 30 units of neurotoxin, with aftercare and a glow recovery kit.","$675","",675,["Wrinkles & lines","Texture & pores"]],
+ ["Packages","VI Peel Purify + Botox","VI Peel Purify for acne-prone skin plus 30 units of Botox, with aftercare and a glow recovery kit.","$695","",695,["Acne & breakouts","Wrinkles & lines"]],
+ ["Packages","The Glow Lift","Filler package for a natural refresh.","$2,100","",2100,["Volume loss"],"$2,320"],
+ ["Packages","The Sculpt Profile","Filler package for structure and contour.","$3,200","",3200,["Volume loss","Sagging skin"],"$4,000"],
+ ["Packages","Total Harmony","Full-face filler rebalancing.","$4,800","",4800,["Volume loss","Sagging skin"],"$6,400+"],
+ ["Packages","Exopod, 6 sessions","Six wellness pod sessions.","$900","",900,["Recovery & detox"]],
+ ["Packages","PRP/PRF Hair Restoration","Four-session regenerative series for thinning hair.","$2,600","",2600,["Hair thinning"]],
+ ["Products","Obagi ELASTIderm Lift Up & Sculpt Moisturizer","","$135","",null,["Sagging skin"]],
+ ["Products","Obagi Retinol + PHA Refining Night Cream","","$135","",null,["Texture & pores","Wrinkles & lines"]],
+ ["Products","Obagi Professional-C Trio Gift Set","$340 value.","$289","",null,["Dark spots & sun damage"],"$340"],
+ ["Products","Obagi ELASTIderm Eye Cream","","$125","",null,["Under-eye"]]
+];
+const SPECIALS=[
+ ["IPL Photofacial","Lumecca IPL for brown spots, redness and sun damage. Full face, normally $400.","$199","$400"],
+ ["SkinPen Microneedling with VAMP","For texture, pores and tone. Normally $600.","$449","$600"],
+ ["VI Peel","Medical-grade peel.","$250","$425"],
+ ["Dermal Filler: Buy 2 Get 1 Free","Revanesse Versa. The third syringe is free, a $750 saving.","$1,500",""],
+ ["Dermal Filler: Buy 1, 2nd Half Off","Two syringes.","$1,125",""],
+ ["Tox / Wrinkle Relaxer, 50 Units","50 units of neurotoxin.","$500",""],
+ ["IPL + SkinPen Microneedling","Combo for tone and texture.","$549",""],
+ ["VI Peel + SkinPen Microneedling","Combo resurfacing.","$475",""],
+ ["Laser Hair Removal Underarms, 6 sessions","DiolazeXL diode laser.","$500",""],
+ ["Laser Hair Removal Bikini, 6 sessions","DiolazeXL diode laser.","$640",""],
+ ["Laser Hair Removal Full Legs, 6 sessions","DiolazeXL diode laser.","$1,200",""],
+ ["Spider Veins, Small Area, 3 sessions","Vasculaze. No needles, no downtime.","$450",""],
+ ["Spider Veins, Medium Area, 3 sessions","Vasculaze. No needles, no downtime.","$900",""],
+ ["Spider Veins, Large Area, 3 sessions","Vasculaze. No needles, no downtime.","$1,350",""]
+];
+const LADDER=[
+ [2,"$30 towards any IV Hydration treatment","Excludes Wellness Optimization IV"],
+ [3,"20% savings on Microneedling with HA",""],
+ [6,"$50 towards any VI Peel",""],
+ [10,"$100 towards Microneedling with VAMP",""],
+ [14,"$100 towards neurotoxin","Valid on 50+ units"],
+ [18,"$150 towards PRP Microneedling Face & Neck",""],
+ [22,"$150 towards any filler syringe",""],
+ [26,"$200 towards PRF Full-Face treatment",""],
+ [30,"$200 towards any PDO Thread Lift",""],
+ [34,"20% savings on any single treatment","Excludes packages and memberships"],
+ [38,"$200 towards a PRP or PRF 3-treatment package",""],
+ [42,"$200 towards any filler package","Glow Lift, Sculpt Profile or Total Harmony"],
+ [46,"25% savings on an Exopod package","Valid on 6+ session packages"],
+ [50,"$200 towards any treatment or service",""]
+];
+const FULLSCRIPT="https://us.fullscript.com/s/eedwards1790882429/shop", GREVIEW="https://share.google/C8BZkCyatR3Gd6z6Y", INSTA="https://www.instagram.com/edencare360";
+const DISC=[
+ ["quantum","Quantum Skin Tightening + Mini Lipo","Next-generation QuantumRF skin tightening, performed by a board-certified physician. When fat removal is needed, Dr. Edwards adds mini liposuction of up to 500 cc in the same visit. Surgical-level contouring of the abdomen, arms, jowls and chin, with no operating room.","Book your consult"],
+ ["womens","Women's Wellness with EmpowerRF","Urge and mixed incontinence, vaginal dryness and laxity are medical conditions, and they are treatable. Discreet, non-surgical care from a female board-certified physician.","Book a private consult"],
+ ["veins","Spider Veins and Leg Veins","Visible leg and facial veins cleared with Vasculaze. No needles, no injections, no downtime, and physician performed.","Book a vein consult"],
+ ["co2","CO2 Laser Resurfacing: The Gold Standard","Dramatic resurfacing for acne scars, lip lines, stretch marks and sun damage. Physician-performed fractional CO2, with an optional PRF add-on to speed healing and cut downtime.","Book now"],
+ ["diolaze","Permanent Smoothness: Diolaze Laser Hair Removal","Stop shaving, stop waxing. DiolazeXL diode laser removes hair fast and comfortably, with built-in cooling and sessions quick enough for a lunch break.","Book now"],
+ ["morpheus","Amplify Collagen: Morpheus8 RF Microneedling","Radiofrequency microneedling that remodels skin from within. Tightens skin, softens acne scars and refines texture on the face and body, with every treatment plan directed by Dr. Edwards.","Book now"],
+ ["ipl","Clearer, Brighter Skin with Lumecca IPL","Powerful IPL for sun damage, age spots, redness and rosacea. Many patients see visible clearing after a single session.","Book now"],
+ ["hrt","Restore Balance with Bioidentical Hormones","Personalized HRT for women and men seeking optimal wellness.","Book now"],
+ ["weight","Physician-Directed Weight Loss","GLP-1 therapy prescribed and monitored by a board-certified Internal Medicine physician, not a franchise protocol. Real medicine, real supervision, real results.","Book now"],
+ ["prf","Next-Generation Regeneration with PRF","The premium upgrade to PRP for enhanced, longer-lasting results.","Book now"],
+ ["prp","Harness Your Body's Healing Power with PRP","Natural regenerative therapy for skin, hair and under-eye rejuvenation.","Book now"],
+ ["microneedling","Stimulate Collagen for Flawless Skin","Reduce scars, wrinkles and pores with advanced microneedling.","Book now"],
+ ["vipeel","Reveal Radiant Skin with VI Peel","Transform texture, tone and clarity with medical-grade chemical peels.","Book now"],
+ ["detox","Experience Full-Body Detox & Recovery","Exopod wellness sessions for deep relaxation and recovery.","Book now"],
+ ["iv","Boost Wellness from the Inside Out","Rapid hydration, energy and recovery through customized IV therapy.","Book now"],
+ ["b12","Quick Energy Boost with B12","Combat fatigue and support metabolism with B12 injections.","Book now"],
+ ["filler","Restore Volume & Define Your Features","Add youthful fullness and contour with advanced dermal fillers.","Book now"],
+ ["neurotoxin","Smooth Away Wrinkles with Neurotoxin Treatments","Turn back the clock with proven anti-aging injectables.","Book now"],
+ ["xeomin","Smooth Dynamic Wrinkles with Xeomin","The purified neurotoxin with no unnecessary additives. Softens frown lines, forehead lines and crow's feet, injected by a physician who knows your facial anatomy.","Book now"],
+ ["obagi","Obagi Medical Skincare, Delivered","The medical-grade skincare line Dr. Edwards trusts for real transformation. Shop Obagi through our official storefront and have it shipped straight to your door.","Shop Obagi","OBAGI"],
+ ["fullscript","Supplement Shop: Fullscript","Practitioner-grade supplements, curated by Dr. Edwards and shipped to your door. Shop our Fullscript dispensary for quality you cannot get off the shelf.","Shop supplements","FULLSCRIPT"],
+ [null,"Flexible Financing with Cherry","Spread the cost of your treatment plan into monthly payments. Applying uses a soft credit check and does not affect your credit score. Affirm and Sunbit are also available at checkout.","Check payment options","CHERRY"],
+ ["xeomin","Allē Rewards: Earn on Botox","Free to join. Earn points on every Botox treatment and turn them into real savings at your next visit. Stacks with our rewards.","Join Allē free","https://alle.com"],
+ ["xperience","Xperience Rewards: Earn on Xeomin","Merz Aesthetics' free loyalty program. Earn rewards on every Xeomin and Radiesse treatment and save on your next visit. Stacks with our rewards.","Join Xperience free","https://www.xperiencemerz.com"],
+ ["reva","REVA Rewards: Daxxify & SkinPen","Revance's free loyalty program for Daxxify and SkinPen treatments. We enroll you at your visit in minutes.","Ask at your visit","AR"],
+ ["instagram","EdenCare 360 on Instagram","Results, specials and behind the scenes. Check us out!","Follow us","INSTA"],
+ [null,"Can We Ask a Favor?","Loved your visit? A quick Google review helps your neighbors find physician-led care, and it means the world to our small practice.","Leave a review","GREVIEW"]
+];
+const CONCERNS=["Wrinkles & lines","Volume loss","Lips","Sagging skin","Texture & pores","Acne scars","Acne & breakouts","Dark spots & sun damage","Under-eye","Stubborn fat","Hair thinning","Weight","Energy & recovery","Recovery & detox","Excessive sweating","Brows & eyes"];
+
+// quiz map: option -> recommendations [name, why]
+const QUIZ=[
+ ["Forehead lines, frown lines or crow's feet",[["Neurotoxin (Botox, Xeomin or Daxxify)","Relaxes the muscles that cause dynamic lines. From $13 a unit."]]],
+ ["Thin lips or lost volume in cheeks",[["Dermal filler","Revanesse Lips or Versa, or Radiesse for collagen support. From $750."],["The Glow Lift package","Natural full-face refresh. $2,100."]]],
+ ["Loose skin on face, jowls or neck",[["Morpheus8 RF microneedling","Remodels and tightens skin from within. $3,000 for 3 sessions."],["QuantumRF skin tightening","Physician-performed, with mini lipo when needed. Consult required."]]],
+ ["Acne scars or rough texture",[["CO2 laser resurfacing","The gold standard for scars. From $750."],["Collagen Renewal Series","3 microneedling sessions with HA. $975."]]],
+ ["Brown spots, redness or sun damage",[["Lumecca IPL photofacial","Black Friday $199 (normally $400)."],["VI Peel Precision","Targets pigment and melasma. From $425."]]],
+ ["Breakouts or large pores",[["VI Peel Purify","Clears congestion and refines pores."],["Microneedling + VI Peel Purify + Peptides","$675 package."]]],
+ ["Tired under-eyes",[["PRF under-eye (EZ Gel)","Regenerative treatment for hollows and crepey skin. From $700."]]],
+ ["Stubborn fat (belly, arms, chin)",[["CryoShock Thermal Sculpt","Fat freezing plus heat. From $179."],["QuantumRF + mini lipo","Contouring with tightening, physician-performed."]]],
+ ["Thinning hair",[["PRP/PRF hair restoration","Four-session regenerative series. $2,600."]]],
+ ["Unwanted hair",[["Diolaze laser hair removal","6-session packages from $500."]]],
+ ["Spider or leg veins",[["Vasculaze vein treatment","3-session packages from $450."]]],
+ ["Weight loss",[["Physician-directed GLP-1 program","Weight Loss Membership $99/month plus medication. Consult required."]]],
+ ["Low energy, menopause or hormone symptoms",[["Hormone Replacement Program","$119/month. Physician-managed."],["IV hydration or B12","Quick energy support. From $40."]]],
+ ["Bladder leakage, dryness or laxity",[["EmpowerRF women's wellness","Discreet, non-surgical care. Private consult."]]]
+];
+
+const $=id=>document.getElementById(id);
+const money=n=>"$"+Math.round(n).toLocaleString();
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(t._t);t._t=setTimeout(()=>t.style.display="none",2600)}
+function ext(u){return `href="${u}" target="_blank" rel="noopener"`}
+
+function go(v){
+  document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===v));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  window.scrollTo(0,0);
+  try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}
+  if(v==="quiz")renderQuiz();
+}
+
+function prodCard(p){
+  const [cat,n,d,pr,unit,num,,was]=p;
+  const mem=num&&cat!=="Products"&&cat!=="Weight Loss"?`<small>Members from ${num<50?"$"+(num*.85).toFixed(2):money(num*.85)}${unit}</small>`:"";
+  return `<div class="card"><div class="item"><div style="flex:1"><h3>${n}</h3>${d?`<p>${d}</p>`:""}</div>
+  <div class="price">${was?`<s>${was}</s>`:""}<b>${pr}<span style="font-size:12px;font-weight:400">${unit}</span></b>${mem}</div></div>
+  <div style="margin-top:10px;display:flex;justify-content:flex-end">${cat==="Products"?`<a class="btn sm" ${ext(OBAGI)}>Shop Obagi</a>`:`<a class="btn sm ghost" ${ext(CHERRY)}>Pay over time</a><a class="btn sm" style="margin-left:8px" ${ext(AR)}>Book</a>`}</div></div>`;
+}
+function specialCard(s){return `<div class="card"><span class="tag hot">Black Friday</span><div class="item"><div style="flex:1"><h3>${s[0]}</h3><p>${s[1]}</p></div><div class="price">${s[3]?`<s>${s[3]}</s>`:""}<b>${s[2]}</b></div></div><div style="margin-top:10px;display:flex;justify-content:flex-end"><a class="btn sm ghost" ${ext(CHERRY)}>Pay over time</a><a class="btn sm" style="margin-left:8px" ${ext(AR_PROMO)}>Claim offer</a></div></div>`}
+
+let shopTab="Specials",concern=null;
+const TABS=["Specials","Injectables","Skin","Body & Wellness","Weight Loss","Packages","Products","Gift Cards"];
+function setShop(t){shopTab=t;concern=null;renderShop()}
+function renderShop(){
+  $("shopTabs").innerHTML=TABS.map(t=>`<button class="chip ${t===shopTab&&!concern?"on":""}" onclick="setShop('${t}')">${t}</button>`).join("");
+  $("concernFilter").innerHTML=concern?`<div class="card" style="display:flex;justify-content:space-between;align-items:center;background:var(--sand);border:none"><span style="font-size:14px">Concern: <b>${concern}</b></span><button class="btn sm ghost" onclick="concern=null;renderShop()">Clear</button></div>`:"";
+  let h="";
+  if(concern){h=P.filter(p=>p[6].includes(concern)).map(prodCard).join("")||`<p class="sec-sub">Ask us about options for this concern.</p>`}
+  else if(shopTab==="Specials"){h=`<div class="sec-sub">Buy by November 30, book any time through March. Pay over time available.</div>`+SPECIALS.map(specialCard).join("")}
+  else if(shopTab==="Gift Cards"){h=`<div class="card" style="text-align:center;background:linear-gradient(150deg,var(--dark),var(--brand));color:#fff;border:none;padding:28px 18px"><div style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:6px">EdenCare 360 eGift Card</div><p style="font-size:14px;opacity:.9;margin-bottom:16px">A simple way to give the perfect present. Delivered by email and redeemable on any treatment.</p><a class="btn light" ${ext(AR_GIFT)}>Buy an eGift card</a></div>`}
+  else{h=P.filter(p=>p[0]===shopTab).map(prodCard).join("")}
+  $("shopList").innerHTML=h;
+}
+function byConcern(c){concern=c;go("shop");renderShop()}
+
+function tierCard(t){
+  return `<div class="tier ${t.pop?"pop":""}">${t.pop?'<div class="badge">MOST POPULAR</div>':""}<h3>${t.n}</h3>
+  <div class="amt">$${t.p}<small>/month</small></div><div class="fine">${t.setup?`$${t.setup} setup fee · `:""}3-month commitment</div>
+  <p class="d">${t.desc}</p>
+  ${t.bank?`<div class="bank"><div><b>$${t.bank}</b><span>banked monthly</span></div><div><b>${t.off}%</b><span>member savings</span></div><div><b>B12</b><span>sign-up bonus</span></div></div>`:""}
+  <ul>${t.perks.map(x=>`<li>${x}</li>`).join("")}</ul>
+  <a class="btn ${t.pop?"":"ghost"} block" ${ext(AR_MEM)}>Join ${t.n.replace(" Beauty Bank","")}</a></div>`;
+}
+
+function renderHome(){
+  $("homeMembers").innerHTML=MEMBERS.map(t=>`<div class="tile mtile" onclick="go('members')"><b>${t.n}</b><div class="p">$${t.p}<span style="font-size:12px;font-weight:400">/month</span></div>${t.off?`<div class="m">${t.off}% off + $${t.bank} credit</div>`:""}</div>`).join("");
+  const best=["Radiesse","Xeomin","Botox","Daxxify","Revanesse Lips"].map(n=>P.find(p=>p[1]===n));
+  $("homeBest").innerHTML=best.map(p=>`<div class="tile" onclick="setShop('Injectables');go('shop')"><b>${p[1]}</b><div class="p">${p[3]}<span style="font-size:12px;font-weight:400">${p[4]}</span></div><div class="m">Members ${p[5]<50?"$"+(p[5]*.85).toFixed(2):money(p[5]*.85)}</div></div>`).join("");
+  $("homeSpecials").innerHTML=SPECIALS.slice(0,6).map(s=>`<div class="tile" onclick="setShop('Specials');go('shop')"><span class="tag hot">Deal</span><b>${s[0]}</b><div class="p">${s[2]}</div>${s[3]?`<div style="font-size:12px;color:var(--muted)"><s>${s[3]}</s></div>`:""}</div>`).join("");
+  $("homeConcerns").innerHTML=CONCERNS.slice(0,12).map(c=>`<button class="chip" onclick="byConcern('${c}')">${c}</button>`).join("");
+}
+function renderDisc(){
+  const L={OBAGI,FULLSCRIPT,CHERRY,INSTA,GREVIEW,AR};
+  $("discList").innerHTML=DISC.map(d=>{const u=d[4]?(L[d[4]]||d[4]):AR;return `<div class="disc">${d[0]?`<img src="img/${d[0]}.jpg" alt="" loading="lazy" style="display:block;width:100%;height:190px;object-fit:cover">`:`<div style="height:8px;background:var(--brand)"></div>`}<div class="top"><h3>${d[1]}</h3><p>${d[2]}</p></div><div class="act"><a class="btn sm" ${ext(u)}>${d[3]}</a></div></div>`}).join("");
+}
+function renderLadder(){$("ladder").innerHTML=LADDER.map(r=>`<div class="rung"><div class="v">${r[0]} visits</div><b>${r[1]}</b>${r[2]?`<small>${r[2]}</small>`:""}</div>`).join("")}
+
+let qSel=new Set();
+function renderQuiz(done){
+  if(!done){
+    $("qSub").textContent="Pick everything you'd like to improve. Takes 30 seconds. Nothing you select is saved or sent.";
+    $("qBody").innerHTML=QUIZ.map((q,i)=>`<div class="q-opt ${qSel.has(i)?"on":""}" onclick="qToggle(${i})"><span class="box">${qSel.has(i)?"✓":""}</span>${q[0]}</div>`).join("")+`<button class="btn block" style="margin-top:8px" onclick="if(!qSel.size){toast('Pick at least one');return}renderQuiz(1)">See my options</button>`;
+    return;
+  }
+  const recs=[];qSel.forEach(i=>QUIZ[i][1].forEach(r=>recs.push([...r,QUIZ[i][0]])));
+  $("qSub").textContent="Based on what you picked, these are the treatments Dr. Edwards commonly uses. Your consultation decides what's right for you.";
+  $("qBody").innerHTML=recs.map(r=>`<div class="rec"><h4>${r[0]}</h4><p>${r[1]}</p><div class="why">For: ${r[2]}</div></div>`).join("")
+   +`<a class="btn block" ${ext(AR)}>Book a consultation</a><button class="btn ghost block" style="margin-top:8px" onclick="qSel.clear();renderQuiz()">Start over</button>
+   <p class="note">General information only, not medical advice. Results vary from person to person.</p>`;
+}
+function qToggle(i){qSel.has(i)?qSel.delete(i):qSel.add(i);renderQuiz()}
+
+async function shareInvite(){
+  const txt="I love EdenCare 360 MedSpa & Wellness in Tangent. Physician-led and amazing results. New patients get $25 off their first treatment: "+AR;
+  try{await navigator.clipboard.writeText(txt);toast("Invite copied. Paste it into a text or DM.")}catch(e){sheet(`<h2>Share EdenCare 360</h2><p class="sec-sub">Copy this message:</p><div class="card" style="font-size:14px;line-height:1.5;user-select:all">${txt}</div><button class="btn block" onclick="closeSheet()">Done</button>`)}
+}
+function openInstall(){sheet(`<h2>Add to your home screen</h2>
+<div class="card"><b>iPhone (Safari)</b><p style="font-size:14px;line-height:1.6;margin-top:6px">1. Tap the Share button<br>2. Tap "Add to Home Screen"<br>3. Tap "Add"</p></div>
+<div class="card"><b>Android (Chrome)</b><p style="font-size:14px;line-height:1.6;margin-top:6px">1. Tap the ⋮ menu<br>2. Tap "Add to Home screen" or "Install app"</p></div>
+<button class="btn block" onclick="closeSheet()">Got it</button>`)}
+function sheet(h){$("sheet").innerHTML=h;$("ov").classList.add("show")}
+function closeSheet(){$("ov").classList.remove("show")}
+
+$("tierList").innerHTML=MEMBERS.map(tierCard).join("");
+renderHome();renderDisc();renderShop();renderLadder();
+const VIEWS=["home","discover","shop","members","rewards","quiz"];
+function fromHash(){const h=location.hash.slice(1);if(VIEWS.includes(h))go(h)}
+window.addEventListener("hashchange",fromHash);fromHash();
+</script>
+</body>
+</html>
