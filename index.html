@@ -605,9 +605,11 @@ const VIEWS=["home","discover","shop","members","rewards","quiz","join"];
 function fromHash(){const h=location.hash.slice(1);if(VIEWS.includes(h))go(h)}
 window.addEventListener("hashchange",fromHash);fromHash();
 </script>
-<script src="js/lead.js"></script>
+<script src="js/lead.js?v=2"></script>
 <script>
 // Ask Eden = the LeadAR AI chat (same assistant as edencare360.com). Falls back to quick answers if it can't load.
+/* Hide LeadAR's own bubble and pop-up prompt (they cover the bottom nav on phones). "Ask Eden" opens the chat; the bubble shows only while chat is open, as its close button. */
+(function tameWidget(n){const w=document.querySelector('chat-widget');const lc=window.leadConnector&&window.leadConnector.chatWidget;if(!w||!w.shadowRoot||!lc||!w.shadowRoot.getElementById('lc_text-widget--btn')){if((n||0)<60)setTimeout(()=>tameWidget((n||0)+1),1000);return}const st=document.createElement('style');st.textContent='.lc_text-widget--prompt{display:none!important}';w.shadowRoot.appendChild(st);const b=w.shadowRoot.getElementById('lc_text-widget--btn');setInterval(()=>{let a=false;try{a=lc.isActive()}catch(e){}b.style.display=a?'':'none'},500)})();
 function askEden(){try{if(window.leadConnector&&window.leadConnector.chatWidget){window.leadConnector.chatWidget.openWidget();return}}catch(e){}openChat()}
 </script>
 <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a67ca9428ea7d349b5c8134"></script>
